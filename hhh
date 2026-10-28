@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false"
+    xmlns:j="jelly:core"
+    xmlns:g="glide"
+    xmlns:j2="null"
+    xmlns:g2="null">
+
+<style>
+  #ud {
+    --ink:#183c43;
+    --muted:#526b72;
+    --line:#d7e3e5;
+    --accent:#087f79;
+    font:14px/1.5 Arial,sans-serif;
+    color:var(--ink);
+    background:#f1f6f7;
+    padding:28px;
+    min-height:100vh;
+  }
+
+  #ud * {
+    box-sizing:border-box;
+  }
+
+  #ud [hidden] {
+    display:none !important;
+  }
+
+  #ud h1 {
+    font-size:28px;
+    margin:0 0 4px;
+  }
+
+  #ud h2 {
+    font-size:19px;
+    margin:0 0 12px;
+  }
+
+  #ud p {
+    margin:4px 0 14px;
+  }
+
+  #ud .ud-muted {
+    color:var(--muted);
+  }
+
+  #ud .ud-toolbar {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    margin:22px 0 10px;
+  }
+
+  #ud input {
+    flex:1;
+    min-width:180px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:12px;
+    font:inherit;
+  }
+
+  #ud button,
+  #ud .ud-link {
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 14px;
+    background:white;
+    color:var(--ink);
+    cursor:pointer;
+    font:inherit;
+    text-decoration:none;
+  }
+
+  #ud #ud-search {
+    background:var(--accent);
+    color:white;
+  }
+
+  #ud button:disabled {
+    opacity:.55;
+    cursor:wait;
+  }
+
+  #ud a {
+    color:#006860;
+  }
+
+  #ud button:focus-visible,
+  #ud a:focus-visible,
+  #ud input:focus-visible {
+    outline:3px solid #d49b22;
+    outline-offset:3px;
+  }
+
+  #ud .ud-layout {
+    display:grid;
+    grid-template-columns:260px minmax(0,1fr);
+    gap:18px;
+    margin-top:18px;
+  }
+
+  #ud .ud-card {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:20px;
+    min-width:0;
+  }
+
+  #ud aside {
+    align-self:start;
+  }
+
+  #ud-users {
+    max-height:680px;
+    overflow:auto;
+  }
+
+  #ud .ud-user {
+    display:block;
+    text-align:left;
+    width:100%;
+    margin:8px 0;
+  }
+
+  #ud .ud-user span {
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  #ud .ud-user[aria-pressed="true"] {
+    background:#e1f2ef;
+    border-color:var(--accent);
+  }
+
+  #ud .ud-top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+  }
+
+  #ud .ud-metrics {
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:12px;
+    margin:16px 0;
+  }
+
+  #ud .ud-metric strong {
+    display:block;
+    font-size:28px;
+    margin-top:5px;
+  }
+
+  #ud .ud-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+  }
+
+  #ud .ud-wide {
+    grid-column:1 / -1;
+  }
+
+  #ud dl {
+    display:grid;
+    grid-template-columns:minmax(110px,1fr) minmax(0,2fr);
+    gap:9px 16px;
+    margin:0;
+  }
+
+  #ud dt {
+    color:var(--muted);
+  }
+
+  #ud dd {
+    margin:0;
+    overflow-wrap:anywhere;
+  }
+
+  #ud .ud-table {
+    overflow:auto;
+  }
+
+  #ud table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+  }
+
+  #ud th,
+  #ud td {
+    text-align:left;
+    padding:11px 9px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+    overflow-wrap:anywhere;
+  }
+
+  #ud th {
+    background:#f4f8f8;
+  }
+
+  #ud .ud-error {
+    color:#a12626;
+  }
+
+  #ud .ud-note {
+    padding:10px;
+    border-radius:7px;
+    background:#fff6dc;
+    color:#684e14;
+    margin-top:12px;
+  }
+
+  @media(max-width:1150px) {
+    #ud .ud-metrics {
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    #ud .ud-grid {
+      grid-template-columns:1fr;
+    }
+  }
+
+  @media(max-width:750px) {
+    #ud {
+      padding:14px;
+    }
+
+    #ud .ud-layout {
+      grid-template-columns:1fr;
+    }
+
+    #ud-users {
+      max-height:220px;
+    }
+
+    #ud .ud-top {
+      flex-wrap:wrap;
+    }
+  }
+</style>
+
+<div id="ud">
+
+  <h1>User Dashboard</h1>
+
+  <p class="ud-muted">
+    Roles, groups, territories and account responsibilities
+  </p>
+
+  <div class="ud-toolbar">
+    <label for="ud-query">Find user</label>
+
+    <input
+      id="ud-query"
+      type="search"
+      maxlength="120"
+      placeholder="Name or user ID"
+      autocomplete="off"
+    />
+
+    <button id="ud-search" type="button">
+      Search
+    </button>
+
+    <button
+      id="ud-refresh"
+      type="button"
+      disabled="disabled">
+      Refresh user
+    </button>
+  </div>
+
+  <div
+    id="ud-search-status"
+    role="status"
+    aria-live="polite">
+  </div>
+
+  <div class="ud-layout">
+
+    <aside
+      class="ud-card"
+      aria-label="User search results">
+
+      <h2>Users</h2>
+      <div id="ud-users"></div>
+    </aside>
+
+    <main id="ud-main" aria-busy="false">
+
+      <p
+        id="ud-status"
+        role="status"
+        aria-live="polite">
+        Select a user to load their dashboard.
+      </p>
+
+      <div id="ud-detail" hidden="hidden">
+
+        <section class="ud-card">
+
+          <div class="ud-top">
+            <h2 id="ud-name"></h2>
+
+            <a
+              id="ud-open-user"
+              class="ud-link"
+              target="_blank"
+              rel="noopener noreferrer">
+              Open user
+            </a>
+          </div>
+
+          <dl id="ud-profile"></dl>
+        </section>
+
+        <div
+          id="ud-metrics"
+          class="ud-metrics">
+        </div>
+
+        <p class="ud-muted">
+          Read-only view of stored records.
+          Counts reflect entries shown, subject to access and limits.
+          Active flags and dates are displayed;
+          effective access is not calculated.
+        </p>
+
+        <div
+          id="ud-sections"
+          class="ud-grid">
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+</div>
+
+</j:jelly>
